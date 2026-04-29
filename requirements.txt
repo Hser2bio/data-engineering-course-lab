@@ -1,0 +1,9 @@
+pandas
+numpy
+matplotlib
+pyarrow
+sqlalchemy
+s3fs
+boto3
+jupyterlab
+notebook

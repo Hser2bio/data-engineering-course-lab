@@ -1,0 +1,37 @@
+services:
+  data-env:
+    build: .
+    container_name: data_env
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/workspace
+    environment:
+      - AWS_ACCESS_KEY_ID=demo
+      - AWS_SECRET_ACCESS_KEY=demo
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ENDPOINT_URL=http://localstack:4566
+    depends_on:
+      - localstack
+    command: >
+      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+
+  minio:   # 👈 AQUÍ, al mismo nivel que los otros
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+    command: server /data --console-address ":9001"
